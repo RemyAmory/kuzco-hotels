@@ -3,11 +3,19 @@ package infra;
 import domain.entity.Chambre;
 import domain.usecase.RecupererChambres;
 import java.util.List;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-class ChambresControllerTest {
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
+public class ChambresControllerTest {
+
+    @Mock
+    private RecupererChambres usecase;
 
     private ChambresController chambresController;
 
@@ -19,14 +27,8 @@ class ChambresControllerTest {
     @Test
     public void getChambres() {
         //GIVEN
-        chambresController = new ChambresController(
-                new RecupererChambres(
-                        new HardcodedChambreRepository()) {
-
-                    public List<Chambre> executer() {
-                        return expected;
-                    }
-                });
+        chambresController = new ChambresController(usecase);
+        when(usecase.executer()).thenReturn(expected);
         //WHEN
         List<Chambre> actual = chambresController.recupererChambres();
         //THEN

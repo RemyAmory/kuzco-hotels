@@ -2,12 +2,20 @@ package domain.usecase;
 
 import domain.entity.Chambre;
 import java.util.List;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class RecupererChambresTest {
 
-    //    @InjectMocks
+    @Mock
+    private ChambreRepository repository;
+
     private RecupererChambres recupererChambres;
 
     private List<Chambre> expected = List.of(
@@ -18,12 +26,8 @@ public class RecupererChambresTest {
     @Test
     public void getChambres() {
         //GIVEN
-        recupererChambres = new RecupererChambres(new ChambreRepository() {
-            @Override
-            public List<Chambre> getChambres() {
-                return expected;
-            }
-        });
+        recupererChambres = new RecupererChambres(repository);
+        when(repository.getChambres()).thenReturn(expected);
         //WHEN
         List<Chambre> actual = recupererChambres.executer();
         //THEN
